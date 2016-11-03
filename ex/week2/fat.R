@@ -22,7 +22,7 @@ table(data2$编号)
 
 # 性别
 summary(data2$性别)
-table(data2$性别)
+table(data2$性别)  # 0:1 = 1.85:1 不算不平衡
 data2$性别 = as.factor(data2$性别)
 
 data2['flag']='+'
@@ -367,14 +367,44 @@ data3<-cbind(data2[,1:3], scale(data2[,4:38],
 library(ggplot2)
 library(grid)
 
-namelist<-c(13,14)
-
+namelist<-c(3:4)
 plist<-list()
 for (colName in names(data3)[namelist]) {
   p<-ggplot(data3)+geom_density(aes_string(x=colName, colour="性别"))
   plist<-c(plist, list(p))
 }
 multiplot(plotlist=plist)
+
+
+pdf("allplot.pdf",family="GB1");
+
+for (i in seq(from=3, to=38, by = 4)) {
+  namelist<-c(i:(i+3))
+  plist<-list()
+  for (colName in names(data3)[namelist]) {
+    p<-ggplot(data3)+geom_density(aes_string(x=colName, colour="性别"))
+    plist<-c(plist, list(p))
+  }
+  print(namelist)
+  print(names(data3)[namelist])
+  multiplot(plotlist=plist, cols=2)
+}
+dev.off();
+
+
+pdf("boxplot.pdf",family="GB1");
+
+for (i in seq(from=3, to=38, by = 4)) {
+  namelist<-c(i:(i+3))
+  plist<-list()
+  for (colName in names(data3)[namelist]) {
+    p<-ggplot(data3,aes_string(y=colName,x="性别"))+geom_boxplot()
+    plist<-c(plist, list(p))
+  }
+  
+  multiplot(plotlist=plist, rows=2, cols=2)
+}
+dev.off();
 
 # PCA: 主成份分析
 # p.cr<-princomp(data2[3:38])
@@ -392,6 +422,32 @@ multiplot(plotlist=plist)
 
 library(MASS)
 plda<-lda(性别~., data=data2[,2:38])
-plda
 
+ldacoef <-coef(plda)
+
+# 影响最大的
+row.names(ldacoef)[which.max(abs(ldacoef))]
+
+pred = predict(plda, new_data = data3[,2:38])
+
+
+plot(data3$性别, pred$x)
+tmpdata = data.frame(gender = data3$性别, ld1 = pred$x)
+ggplot(tmpdata)+geom_density(aes(x=LD1, colour=gender)) # 变换后
+
+# 原始字段
+ggplot(data3)+geom_density(aes_string(x="腰臀比", colour="性别"))
+
+# 特征选择
+library(caret)
+subsets <- c(1,2,5,10,20,30)
+ctrl= rfeControl(functions = rfFuncs, method = "cv",verbose = FALSE, returnResamp = "final")
+Profile = rfe(x=data3[,3:38], y=data3$性别, sizes = subsets, rfeControl = ctrl)
+print(Profile)
+plot(Profile)
+Profile$optVariables  # 最优的是："基础代谢率"
+
+p1<-ggplot(data3)+geom_density(aes_string(x="基础代谢率", colour="性别"))
+p2<-ggplot(data3)+geom_density(aes_string(x="脂肪百分比", colour="性别"))
+multiplot(p1,p2)
 
