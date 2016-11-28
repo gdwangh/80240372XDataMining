@@ -1,13 +1,17 @@
 setwd('D:/study/80240372XDataMining/ex/week3 decisiontrees')
+setwd('D:/doc/study/80240372XDataMining/ex/week3 decisiontrees')
 
 library(rpart)
-library(kknn)
 library(datasets)
 library(rpart.plot)
 library(caTools)
 
 # Train Classification Tree
-data(ionosphere)
+ionosphere<-read.csv("ionosphere.data",head=FALSE)
+names(ionosphere)[35] <- "class"
+names(ionosphere)
+
+# data(ionosphere)
 nrow(ionosphere)
 
 set.seed(1)
@@ -39,9 +43,27 @@ table(ionosphereTest$class, ionoTest2_Pred)
 tree2_err<-(22+39)/nrow(ionosphereTest)
 tree2_err   # 0.8714286
 
+#Specify to grow each tree using a minimum leaf size in leafs.
+err1<-rep(0,15)
+
+for (minleaf in c(1:15) ) {
+  ct<-rpart.control(minbucket=minleaf)
+  fit<-rpart(class~., data=ionosphereTrain, control=ct, method="class")
+  
+  pred<-predict(fit, newdata=ionosphereTest, type = "class")
+  err1[minleaf]<-sum(pred==ionosphereTest$class)/nrow(ionosphereTest)
+  cat(minleaf, ", err1=", err1[minleaf], "\n")
+}
+
+
+
 # Train Regression Tree
 data(mtcars)
 carsTree<-rpart(mpg~hp+wt, data=mtcars, method="anova")
 prp(carsTree)
 
-carsTree
+mse<-sqrt(sum(residuals(carsTree)^2)/nrow(mtcars))
+mse
+
+
+
