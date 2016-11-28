@@ -1,4 +1,5 @@
 setwd("D:/study/80240372XDataMining/ex/week2")
+setwd("D:/doc/study/80240372XDataMining/ex/week2")
 
 data1 <- read.csv("data.csv", stringsAsFactors=FALSE)
 
@@ -6,358 +7,365 @@ library(Rlof)
 
 summary(data1)
 
-# æ£€æŸ¥è¡Œæ•°ã€åˆ—æ•°
+# ¼ì²éĞĞÊı¡¢ÁĞÊı
 nrow(data1)
 ncol(data1)
 
-# åˆ é™¤å¤šä½™æ— ç”¨çš„åˆ—
+# É¾³ı¶àÓàÎŞÓÃµÄÁĞ
 data2<-data1[1:38]
 ncol(data2)
 
-# æ£€æŸ¥æ˜¯å¦æœ‰ç¼ºå¤±å€¼ --- æ²¡æœ‰
+# ¼ì²éÊÇ·ñÓĞÈ±Ê§Öµ --- Ã»ÓĞ
 summary(data2)
 
-# ç¼–å· --- éƒ¨åˆ†ç¼–å·é‡å¤ï¼Œä¸”é‡å¤çš„è®°å½•æœ‰äº›ä¸åƒåŒä¸€ä¸ªäººï¼Ÿ
-table(data2$ç¼–å·)
+# ±àºÅ --- ²¿·Ö±àºÅÖØ¸´£¬ÇÒÖØ¸´µÄ¼ÇÂ¼ÓĞĞ©²»ÏñÍ¬Ò»¸öÈË£¿
+table(data2$±àºÅ)
 
-# æ€§åˆ«
-summary(data2$æ€§åˆ«)
-table(data2$æ€§åˆ«)  # 0:1 = 1.85:1 ä¸ç®—ä¸å¹³è¡¡
-data2$æ€§åˆ« = as.factor(data2$æ€§åˆ«)
+# ĞÔ±ğ
+summary(data2$ĞÔ±ğ)
+table(data2$ĞÔ±ğ)  # 0:1 = 1.85:1 ²»Ëã²»Æ½ºâ
+data2$ĞÔ±ğ = as.factor(data2$ĞÔ±ğ)
 
 data2['flag']='+'
 
-Maledata = data2[data2$æ€§åˆ«==0,]
-FemaleData = data2[data2$æ€§åˆ«==1,]
+Maledata = data2[data2$ĞÔ±ğ==0,]
+FemaleData = data2[data2$ĞÔ±ğ==1,]
 
-plot(data2$æ€§åˆ«)
+plot(data2$ĞÔ±ğ)
 
-# å¹´é¾„
-summary(data2$å¹´é¾„)
-table(data2$å¹´é¾„)
-hist(data2$å¹´é¾„)
+# ÄêÁä
+summary(data2$ÄêÁä)
+table(data2$ÄêÁä)
+hist(data2$ÄêÁä)
 
-# èº«é«˜, å•ä½ï¼šcm
-summary(data2$èº«é«˜)
-table(data2$èº«é«˜)
-hist(data2$èº«é«˜)
-boxplot(èº«é«˜~æ€§åˆ«,data=data2)
-plot(data2$èº«é«˜,data2$å¹´é¾„,col=data2$æ€§åˆ«)
+# Éí¸ß, µ¥Î»£ºcm
+summary(data2$Éí¸ß)
+table(data2$Éí¸ß)
+hist(data2$Éí¸ß)
+boxplot(Éí¸ß~ĞÔ±ğ,data=data2)
+plot(data2$Éí¸ß,data2$ÄêÁä,col=data2$ĞÔ±ğ)
 
-boxplot.stats(Maledata$èº«é«˜)$out
-boxplot.stats(FemaleData$èº«é«˜)$out
+# boxplot.stats(x, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+# --- ËÄ·Ö·¨ÅĞ¶ÏoutlierÖµ
+boxplot.stats(Maledata$Éí¸ß)$out
+boxplot.stats(FemaleData$Éí¸ß)$out
 
-lof<-myLOF(data2$èº«é«˜, k=3)
+# ÓÃ3sigma·¨ÅĞ¶ÏoutlierÖµ£¬Ã»ÓĞoutlierÖµ
+data2$Éí¸ß[checkOutlet_sigma(data2$Éí¸ß, 3, 'logic')]
+
+
+# ÓÃlof·¨ÅĞ¶ÏoutlierÖµ
+lof<-myLOF(data2$Éí¸ß, k=3)
 summary(lof)
 plot(density(lof))
-data2$èº«é«˜[order(lof, decreasing=T)][1:5]
+data2$Éí¸ß[order(lof, decreasing=T)][1:5]
 
-# ä½“é‡ï¼Œå•ä½:kg
-summary(data2$ä½“é‡)
-table(data2$ä½“é‡)
-hist(data2$ä½“é‡)
-boxplot(ä½“é‡~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«) 
+# ÌåÖØ£¬µ¥Î»:kg
+summary(data2$ÌåÖØ)
+table(data2$ÌåÖØ)
+hist(data2$ÌåÖØ)
+boxplot(ÌåÖØ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ) 
 
-boxplot.stats(Maledata$ä½“é‡)$out
-boxplot.stats(FemaleData$ä½“é‡)$out
+boxplot.stats(Maledata$ÌåÖØ)$out
+boxplot.stats(FemaleData$ÌåÖØ)$out
 
-lof<-myLOF(data2$ä½“é‡, k=3)
+lof<-myLOF(data2$ÌåÖØ, k=3)
 summary(lof)
 plot(density(lof))
-data2$ä½“é‡[order(lof, decreasing=T)][1:5]
+data2$ÌåÖØ[order(lof, decreasing=T)][1:5]
 
-# éƒ¨åˆ†ä½“é‡æœ‰ç‚¹å¤ªè½»äº† --> æ¨æ–­ æ€§åˆ«=1 --> Female, =0 -> Male
-plot(data2$èº«é«˜, data2$ä½“é‡,col=data2$æ€§åˆ«)
+# ²¿·ÖÌåÖØÓĞµãÌ«ÇáÁË --> ÍÆ¶Ï ĞÔ±ğ=1 --> Female, =0 -> Male
+plot(data2$Éí¸ß, data2$ÌåÖØ,col=data2$ĞÔ±ğ)
 
-# ç»†èƒå†…æ¶²
-summary(data2$ç»†èƒå†…æ¶²)
-boxplot(ç»†èƒå†…æ¶²~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)   
+# Ï¸°ûÄÚÒº
+summary(data2$Ï¸°ûÄÚÒº)
+boxplot(Ï¸°ûÄÚÒº~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)   
 
-boxplot.stats(Maledata$ç»†èƒå†…æ¶²)$out
-boxplot.stats(FemaleData$ç»†èƒå†…æ¶²)$out
+boxplot.stats(Maledata$Ï¸°ûÄÚÒº)$out
+boxplot.stats(FemaleData$Ï¸°ûÄÚÒº)$out
 
-lof<-myLOF(data2$ç»†èƒå†…æ¶², k=3)
+lof<-myLOF(data2$Ï¸°ûÄÚÒº, k=3)
 summary(lof)
 plot(density(lof))
-data2$ç»†èƒå†…æ¶²[order(lof, decreasing=T)][1:5]
+data2$Ï¸°ûÄÚÒº[order(lof, decreasing=T)][1:5]
 
-# ç»†èƒå¤–æ¶²
-summary(data2$ç»†èƒå¤–æ¶²)
-boxplot(ç»†èƒå¤–æ¶²~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)   
+# Ï¸°ûÍâÒº
+summary(data2$Ï¸°ûÍâÒº)
+boxplot(Ï¸°ûÍâÒº~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)   
 
-boxplot.stats(Maledata$ç»†èƒå¤–æ¶²)$out
-boxplot.stats(FemaleData$ç»†èƒå¤–æ¶²)$out
+boxplot.stats(Maledata$Ï¸°ûÍâÒº)$out
+boxplot.stats(FemaleData$Ï¸°ûÍâÒº)$out
 
 
-# è‚Œè‚‰é‡
-summary(data2$è‚Œè‚‰é‡)
-boxplot(è‚Œè‚‰é‡~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)   
+# ¼¡ÈâÖØ
+summary(data2$¼¡ÈâÖØ)
+boxplot(¼¡ÈâÖØ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)   
 
-boxplot.stats(Maledata$è‚Œè‚‰é‡)$out
-boxplot.stats(FemaleData$è‚Œè‚‰é‡)$out
+boxplot.stats(Maledata$¼¡ÈâÖØ)$out
+boxplot.stats(FemaleData$¼¡ÈâÖØ)$out
 
-lof<-myLOF(data2$è‚Œè‚‰é‡, k=3)
+lof<-myLOF(data2$¼¡ÈâÖØ, k=3)
 summary(lof)
 plot(density(lof))
-data2$è‚Œè‚‰é‡[order(lof, decreasing=T)][1:5]
+data2$¼¡ÈâÖØ[order(lof, decreasing=T)][1:5]
 
-# è›‹ç™½è´¨
-summary(data2$è›‹ç™½è´¨)
-boxplot(è›‹ç™½è´¨~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)   
+# µ°°×ÖÊ
+summary(data2$µ°°×ÖÊ)
+boxplot(µ°°×ÖÊ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)   
 
-boxplot.stats(Maledata$è›‹ç™½è´¨)$out
-boxplot.stats(FemaleData$è›‹ç™½è´¨)$out
+boxplot.stats(Maledata$µ°°×ÖÊ)$out
+boxplot.stats(FemaleData$µ°°×ÖÊ)$out
 
-lof<-myLOF(data2$è‚Œè‚‰é‡, k=3)
+lof<-myLOF(data2$¼¡ÈâÖØ, k=3)
 summary(lof)
 plot(density(lof))
-data2$è‚Œè‚‰é‡[order(lof, decreasing=T)][1:5]
+data2$¼¡ÈâÖØ[order(lof, decreasing=T)][1:5]
 
-# ç˜¦ä½“é‡
-summary(data2$ç˜¦ä½“é‡)
-boxplot(ç˜¦ä½“é‡~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)   
+# ÊİÌåÖØ
+summary(data2$ÊİÌåÖØ)
+boxplot(ÊİÌåÖØ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)   
 
-boxplot.stats(Maledata$ç˜¦ä½“é‡)$out
-boxplot.stats(FemaleData$ç˜¦ä½“é‡)$out
+boxplot.stats(Maledata$ÊİÌåÖØ)$out
+boxplot.stats(FemaleData$ÊİÌåÖØ)$out
 
-# æ— æœºç›
-summary(data2$æ— æœºç›)
-boxplot(æ— æœºç›~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)   
+# ÎŞ»úÑÎ
+summary(data2$ÎŞ»úÑÎ)
+boxplot(ÎŞ»úÑÎ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)   
 
-boxplot.stats(Maledata$æ— æœºç›)$out
-boxplot.stats(FemaleData$æ— æœºç›)$out
+boxplot.stats(Maledata$ÎŞ»úÑÎ)$out
+boxplot.stats(FemaleData$ÎŞ»úÑÎ)$out
 
-lof<-myLOF(data2$æ— æœºç›, k=3)
+lof<-myLOF(data2$ÎŞ»úÑÎ, k=3)
 summary(lof)
 plot(density(lof))
-data2$æ— æœºç›[order(lof, decreasing=T)][1:5]
+data2$ÎŞ»úÑÎ[order(lof, decreasing=T)][1:5]
 
-# è„‚è‚ªé‡ --- æœ‰è´Ÿå€¼ï¼Œå¼‚å¸¸
-summary(data2$è„‚è‚ªé‡)
-data2[data2$è„‚è‚ªé‡<=0, 'flag']='-'
+# Ö¬·¾ÖØ --- ÓĞ¸ºÖµ£¬Òì³£
+summary(data2$Ö¬·¾ÖØ)
+data2[data2$Ö¬·¾ÖØ<=0, 'flag']='-'
 
-boxplot(è„‚è‚ªé‡~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)   
+boxplot(Ö¬·¾ÖØ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)   
 
-boxplot.stats(Maledata$è„‚è‚ªé‡)$out
-boxplot.stats(FemaleData$è„‚è‚ªé‡)$out
+boxplot.stats(Maledata$Ö¬·¾ÖØ)$out
+boxplot.stats(FemaleData$Ö¬·¾ÖØ)$out
 
-lof<-myLOF(data2$è„‚è‚ªé‡, k=3)
+lof<-myLOF(data2$Ö¬·¾ÖØ, k=3)
 summary(lof)
 plot(density(lof))
-data2$è„‚è‚ªé‡[order(lof, decreasing=T)][1:5]
+data2$Ö¬·¾ÖØ[order(lof, decreasing=T)][1:5]
 
-# è„‚è‚ªç™¾åˆ†æ¯”
-summary(data2$è„‚è‚ªç™¾åˆ†æ¯”)
-data2[data2$è„‚è‚ªç™¾åˆ†æ¯”<=0, 'flag']='-'
+# Ö¬·¾°Ù·Ö±È
+summary(data2$Ö¬·¾°Ù·Ö±È)
+data2[data2$Ö¬·¾°Ù·Ö±È<=0, 'flag']='-'
 
-boxplot(è„‚è‚ªç™¾åˆ†æ¯”~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)   
+boxplot(Ö¬·¾°Ù·Ö±È~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)   
 
-boxplot.stats(Maledata$è„‚è‚ªç™¾åˆ†æ¯”)$out
-boxplot.stats(FemaleData$è„‚è‚ªç™¾åˆ†æ¯”)$out
+boxplot.stats(Maledata$Ö¬·¾°Ù·Ö±È)$out
+boxplot.stats(FemaleData$Ö¬·¾°Ù·Ö±È)$out
 
-lof<-myLOF(data2$è„‚è‚ªç™¾åˆ†æ¯”, k=3)
+lof<-myLOF(data2$Ö¬·¾°Ù·Ö±È, k=3)
 summary(lof)
 plot(density(lof))
-data2$è„‚è‚ªç™¾åˆ†æ¯”[order(lof, decreasing=T)][1:5]
+data2$Ö¬·¾°Ù·Ö±È[order(lof, decreasing=T)][1:5]
 
 
-# è…°è‡€æ¯”
-summary(data2$è…°è‡€æ¯”)
-boxplot(è…°è‡€æ¯”~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)   
+# ÑüÍÎ±È
+summary(data2$ÑüÍÎ±È)
+boxplot(ÑüÍÎ±È~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)   
 
-boxplot.stats(Maledata$è…°è‡€æ¯”)$out
-boxplot.stats(FemaleData$è…°è‡€æ¯”)$out
+boxplot.stats(Maledata$ÑüÍÎ±È)$out
+boxplot.stats(FemaleData$ÑüÍÎ±È)$out
 
-# è‚¥èƒ–åº¦
-summary(data2$è‚¥èƒ–åº¦)
-boxplot(è‚¥èƒ–åº¦~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)   
+# ·ÊÅÖ¶È
+summary(data2$·ÊÅÖ¶È)
+boxplot(·ÊÅÖ¶È~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)   
 
   
-# ä½“è´¨æŒ‡æ•°
-summary(data2$ä½“è´¨æŒ‡æ•°)
-boxplot(ä½“è´¨æŒ‡æ•°~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)   
+# ÌåÖÊÖ¸Êı
+summary(data2$ÌåÖÊÖ¸Êı)
+boxplot(ÌåÖÊÖ¸Êı~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)   
 
-boxplot.stats(Maledata$ä½“è´¨æŒ‡æ•°)$out
-boxplot.stats(FemaleData$ä½“è´¨æŒ‡æ•°)$out
+boxplot.stats(Maledata$ÌåÖÊÖ¸Êı)$out
+boxplot.stats(FemaleData$ÌåÖÊÖ¸Êı)$out
 
-# è‚Œè‚‰æ§åˆ¶
-summary(data2$è‚Œè‚‰æ§åˆ¶)
-boxplot(è‚Œè‚‰æ§åˆ¶~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«) 
-boxplot.stats(Maledata$è‚Œè‚‰æ§åˆ¶)$out
-boxplot.stats(FemaleData$è‚Œè‚‰æ§åˆ¶)$out
+# ¼¡Èâ¿ØÖÆ
+summary(data2$¼¡Èâ¿ØÖÆ)
+boxplot(¼¡Èâ¿ØÖÆ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ) 
+boxplot.stats(Maledata$¼¡Èâ¿ØÖÆ)$out
+boxplot.stats(FemaleData$¼¡Èâ¿ØÖÆ)$out
 
-# è„‚è‚ªæ§åˆ¶
-summary(data2$è„‚è‚ªæ§åˆ¶)
-boxplot(è„‚è‚ªæ§åˆ¶~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«) 
-boxplot.stats(Maledata$è„‚è‚ªæ§åˆ¶)$out
-boxplot.stats(FemaleData$è„‚è‚ªæ§åˆ¶)$out
+# Ö¬·¾¿ØÖÆ
+summary(data2$Ö¬·¾¿ØÖÆ)
+boxplot(Ö¬·¾¿ØÖÆ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ) 
+boxplot.stats(Maledata$Ö¬·¾¿ØÖÆ)$out
+boxplot.stats(FemaleData$Ö¬·¾¿ØÖÆ)$out
 
-# ä½“é‡æ§åˆ¶
-summary(data2$ä½“é‡æ§åˆ¶)
-boxplot(ä½“é‡æ§åˆ¶~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«) 
-boxplot.stats(Maledata$ä½“é‡æ§åˆ¶)$out
-boxplot.stats(FemaleData$ä½“é‡æ§åˆ¶)$out
+# ÌåÖØ¿ØÖÆ
+summary(data2$ÌåÖØ¿ØÖÆ)
+boxplot(ÌåÖØ¿ØÖÆ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ) 
+boxplot.stats(Maledata$ÌåÖØ¿ØÖÆ)$out
+boxplot.stats(FemaleData$ÌåÖØ¿ØÖÆ)$out
 
 
-# æ ‡å‡†ä½“é‡
-summary(data2$æ ‡å‡†ä½“é‡)
-boxplot(æ ‡å‡†ä½“é‡~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«) 
-boxplot.stats(Maledata$æ ‡å‡†ä½“é‡)$out
-boxplot.stats(FemaleData$æ ‡å‡†ä½“é‡)$out
+# ±ê×¼ÌåÖØ
+summary(data2$±ê×¼ÌåÖØ)
+boxplot(±ê×¼ÌåÖØ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ) 
+boxplot.stats(Maledata$±ê×¼ÌåÖØ)$out
+boxplot.stats(FemaleData$±ê×¼ÌåÖØ)$out
 
-# ç›®æ ‡ä½“é‡
-summary(data2$ç›®æ ‡ä½“é‡)
-boxplot(ç›®æ ‡ä½“é‡~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«) 
-boxplot.stats(Maledata$ç›®æ ‡ä½“é‡)$out
-boxplot.stats(FemaleData$ç›®æ ‡ä½“é‡)$out
+# Ä¿±êÌåÖØ
+summary(data2$Ä¿±êÌåÖØ)
+boxplot(Ä¿±êÌåÖØ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ) 
+boxplot.stats(Maledata$Ä¿±êÌåÖØ)$out
+boxplot.stats(FemaleData$Ä¿±êÌåÖØ)$out
 
-# åŸºç¡€ä»£è°¢ç‡
-summary(data2$åŸºç¡€ä»£è°¢ç‡)
-boxplot(åŸºç¡€ä»£è°¢ç‡~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«) 
-boxplot.stats(Maledata$åŸºç¡€ä»£è°¢ç‡)$out
-boxplot.stats(FemaleData$åŸºç¡€ä»£è°¢ç‡)$out
+# »ù´¡´úĞ»ÂÊ
+summary(data2$»ù´¡´úĞ»ÂÊ)
+boxplot(»ù´¡´úĞ»ÂÊ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ) 
+boxplot.stats(Maledata$»ù´¡´úĞ»ÂÊ)$out
+boxplot.stats(FemaleData$»ù´¡´úĞ»ÂÊ)$out
 
-# èº¯å¹²è‚Œè‚‰
-summary(data2$èº¯å¹²è‚Œè‚‰)
-boxplot(èº¯å¹²è‚Œè‚‰~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«) 
-boxplot.stats(Maledata$èº¯å¹²è‚Œè‚‰)$out
-boxplot.stats(FemaleData$èº¯å¹²è‚Œè‚‰)$out
+# Çû¸É¼¡Èâ
+summary(data2$Çû¸É¼¡Èâ)
+boxplot(Çû¸É¼¡Èâ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ) 
+boxplot.stats(Maledata$Çû¸É¼¡Èâ)$out
+boxplot.stats(FemaleData$Çû¸É¼¡Èâ)$out
 
-# èº¯å¹²éª¨è´¨
-summary(data2$èº¯å¹²éª¨è´¨)
-boxplot(èº¯å¹²éª¨è´¨~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«) 
-boxplot.stats(Maledata$èº¯å¹²éª¨è´¨)$out
-boxplot.stats(FemaleData$èº¯å¹²éª¨è´¨)$out
+# Çû¸É¹ÇÖÊ
+summary(data2$Çû¸É¹ÇÖÊ)
+boxplot(Çû¸É¹ÇÖÊ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ) 
+boxplot.stats(Maledata$Çû¸É¹ÇÖÊ)$out
+boxplot.stats(FemaleData$Çû¸É¹ÇÖÊ)$out
 
-# èº¯å¹²è„‚è‚ª
-summary(data2$èº¯å¹²è„‚è‚ª)
-boxplot(èº¯å¹²è„‚è‚ª~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
-boxplot.stats(Maledata$èº¯å¹²è„‚è‚ª)$out
-boxplot.stats(FemaleData$èº¯å¹²è„‚è‚ª)$out
+# Çû¸ÉÖ¬·¾
+summary(data2$Çû¸ÉÖ¬·¾)
+boxplot(Çû¸ÉÖ¬·¾~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
+boxplot.stats(Maledata$Çû¸ÉÖ¬·¾)$out
+boxplot.stats(FemaleData$Çû¸ÉÖ¬·¾)$out
 
-# èº¯å¹²è‚Œè‚‰
-summary(data2$èº¯å¹²è‚Œè‚‰)
-boxplot(èº¯å¹²è‚Œè‚‰~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
-boxplot.stats(Maledata$èº¯å¹²è‚Œè‚‰)$out
-boxplot.stats(FemaleData$èº¯å¹²è‚Œè‚‰)$out
+# Çû¸É¼¡Èâ
+summary(data2$Çû¸É¼¡Èâ)
+boxplot(Çû¸É¼¡Èâ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
+boxplot.stats(Maledata$Çû¸É¼¡Èâ)$out
+boxplot.stats(FemaleData$Çû¸É¼¡Èâ)$out
 
-# èº¯å¹²è„‚è‚ªç™¾åˆ†æ¯”
-summary(data2$èº¯å¹²è„‚è‚ªç™¾åˆ†æ¯”)
-boxplot(èº¯å¹²è„‚è‚ªç™¾åˆ†æ¯”~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
-data2[data2$èº¯å¹²è„‚è‚ªç™¾åˆ†æ¯”<=0, 'flag']='-'
+# Çû¸ÉÖ¬·¾°Ù·Ö±È
+summary(data2$Çû¸ÉÖ¬·¾°Ù·Ö±È)
+boxplot(Çû¸ÉÖ¬·¾°Ù·Ö±È~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
+data2[data2$Çû¸ÉÖ¬·¾°Ù·Ö±È<=0, 'flag']='-'
   
-# å·¦ä¸Šè‚¢è‚Œè‚‰
-#å·¦ä¸Šè‚¢éª¨è´¨
-#å·¦ä¸Šè‚¢è„‚è‚ª
+# ×óÉÏÖ«¼¡Èâ
+#×óÉÏÖ«¹ÇÖÊ
+#×óÉÏÖ«Ö¬·¾
 summary(data2[27:29])
-data2[data2$å·¦ä¸Šè‚¢è‚Œè‚‰<=0, 'flag']='-'
-data2[data2$å·¦ä¸Šè‚¢éª¨è´¨<=0, 'flag']='-'
+data2[data2$×óÉÏÖ«¼¡Èâ<=0, 'flag']='-'
+data2[data2$×óÉÏÖ«¹ÇÖÊ<=0, 'flag']='-'
 
 
-boxplot(å·¦ä¸Šè‚¢è‚Œè‚‰~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
-boxplot(å·¦ä¸Šè‚¢éª¨è´¨~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
-boxplot(å·¦ä¸Šè‚¢è„‚è‚ª~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
+boxplot(×óÉÏÖ«¼¡Èâ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
+boxplot(×óÉÏÖ«¹ÇÖÊ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
+boxplot(×óÉÏÖ«Ö¬·¾~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
 
-boxplot.stats(data2$å·¦ä¸Šè‚¢è‚Œè‚‰)$out
-boxplot.stats(data2$å·¦ä¸Šè‚¢éª¨è´¨)$out
-boxplot.stats(data2$å·¦ä¸Šè‚¢è„‚è‚ª)$out
+boxplot.stats(data2$×óÉÏÖ«¼¡Èâ)$out
+boxplot.stats(data2$×óÉÏÖ«¹ÇÖÊ)$out
+boxplot.stats(data2$×óÉÏÖ«Ö¬·¾)$out
 
 
-#å³ä¸Šè‚¢è‚Œè‚‰
-# å³ä¸Šè‚¢éª¨è´¨
-# å³ä¸Šè‚¢è„‚è‚ª
+#ÓÒÉÏÖ«¼¡Èâ
+# ÓÒÉÏÖ«¹ÇÖÊ
+# ÓÒÉÏÖ«Ö¬·¾
 summary(data2[30:32])
-data2[data2$å³ä¸Šè‚¢è‚Œè‚‰<=0, 'flag']='-'
-data2[data2$å³ä¸Šè‚¢éª¨è´¨<=0, 'flag']='-'
+data2[data2$ÓÒÉÏÖ«¼¡Èâ<=0, 'flag']='-'
+data2[data2$ÓÒÉÏÖ«¹ÇÖÊ<=0, 'flag']='-'
 
-boxplot(å³ä¸Šè‚¢è‚Œè‚‰~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
-boxplot(å³ä¸Šè‚¢éª¨è´¨~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
-boxplot(å³ä¸Šè‚¢è„‚è‚ª~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
+boxplot(ÓÒÉÏÖ«¼¡Èâ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
+boxplot(ÓÒÉÏÖ«¹ÇÖÊ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
+boxplot(ÓÒÉÏÖ«Ö¬·¾~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
 
-boxplot.stats(data2$å³ä¸Šè‚¢è‚Œè‚‰)$out
-boxplot.stats(data2$å³ä¸Šè‚¢éª¨è´¨)$out
-boxplot.stats(data2$å³ä¸Šè‚¢è„‚è‚ª)$out
+boxplot.stats(data2$ÓÒÉÏÖ«¼¡Èâ)$out
+boxplot.stats(data2$ÓÒÉÏÖ«¹ÇÖÊ)$out
+boxplot.stats(data2$ÓÒÉÏÖ«Ö¬·¾)$out
 
-#å·¦ä¸‹è‚¢è‚Œè‚‰
-#å·¦ä¸‹è‚¢éª¨è´¨
-#å·¦ä¸‹è‚¢è„‚è‚ª
+#×óÏÂÖ«¼¡Èâ
+#×óÏÂÖ«¹ÇÖÊ
+#×óÏÂÖ«Ö¬·¾
 summary(data2[33:35])
 
-boxplot(å·¦ä¸‹è‚¢è‚Œè‚‰~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
-boxplot(å·¦ä¸‹è‚¢éª¨è´¨~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
-boxplot(å·¦ä¸‹è‚¢è„‚è‚ª~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
+boxplot(×óÏÂÖ«¼¡Èâ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
+boxplot(×óÏÂÖ«¹ÇÖÊ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
+boxplot(×óÏÂÖ«Ö¬·¾~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
 
-boxplot.stats(data2$å·¦ä¸‹è‚¢è‚Œè‚‰)$out
-boxplot.stats(data2$å·¦ä¸‹è‚¢éª¨è´¨)$out
-boxplot.stats(data2$å·¦ä¸‹è‚¢è„‚è‚ª)$out
+boxplot.stats(data2$×óÏÂÖ«¼¡Èâ)$out
+boxplot.stats(data2$×óÏÂÖ«¹ÇÖÊ)$out
+boxplot.stats(data2$×óÏÂÖ«Ö¬·¾)$out
 
-data2[data2$å·¦ä¸‹è‚¢è‚Œè‚‰>20, 'flag']='-'
+data2[data2$×óÏÂÖ«¼¡Èâ>20, 'flag']='-'
 
-#å³ä¸‹è‚¢è‚Œè‚‰
-#å³ä¸‹è‚¢éª¨è´¨
-#å³ä¸‹è‚¢è„‚è‚ª
+#ÓÒÏÂÖ«¼¡Èâ
+#ÓÒÏÂÖ«¹ÇÖÊ
+#ÓÒÏÂÖ«Ö¬·¾
 summary(data2[36:38])
 
-boxplot(å³ä¸‹è‚¢è‚Œè‚‰~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
-boxplot(å³ä¸‹è‚¢éª¨è´¨~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
-boxplot(å³ä¸‹è‚¢è„‚è‚ª~æ€§åˆ«,data=data2,col=data2$æ€§åˆ«)
+boxplot(ÓÒÏÂÖ«¼¡Èâ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
+boxplot(ÓÒÏÂÖ«¹ÇÖÊ~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
+boxplot(ÓÒÏÂÖ«Ö¬·¾~ĞÔ±ğ,data=data2,col=data2$ĞÔ±ğ)
 
-boxplot.stats(data2$å³ä¸‹è‚¢è‚Œè‚‰)$out
-boxplot.stats(data2$å³ä¸‹è‚¢éª¨è´¨)$out
-boxplot.stats(data2$å³ä¸‹è‚¢è„‚è‚ª)$out
+boxplot.stats(data2$ÓÒÏÂÖ«¼¡Èâ)$out
+boxplot.stats(data2$ÓÒÏÂÖ«¹ÇÖÊ)$out
+boxplot.stats(data2$ÓÒÏÂÖ«Ö¬·¾)$out
 
-data2[data2$å³ä¸‹è‚¢è‚Œè‚‰==168, 'flag']='-'
-data2[data2$å³ä¸‹è‚¢è‚Œè‚‰==51, 'flag']='-'
+data2[data2$ÓÒÏÂÖ«¼¡Èâ==168, 'flag']='-'
+data2[data2$ÓÒÏÂÖ«¼¡Èâ==51, 'flag']='-'
 
-# å¤šä¸ªå­—æ®µå…³ç³»æ£€æŸ¥
+# ¶à¸ö×Ö¶Î¹ØÏµ¼ì²é
 data2<-data2[data2$flag=='+',]
 
-# ç»†èƒå†…ï¼šç»†èƒå¤–
-summary(data2$ç»†èƒå†…æ¶²/data2$ç»†èƒå¤–æ¶²)
-summary((data2$ç»†èƒå†…æ¶²+data2$ç»†èƒå¤–æ¶²)/data2$ä½“é‡)
+# Ï¸°ûÄÚ£ºÏ¸°ûÍâ
+summary(data2$Ï¸°ûÄÚÒº/data2$Ï¸°ûÍâÒº)
+summary((data2$Ï¸°ûÄÚÒº+data2$Ï¸°ûÍâÒº)/data2$ÌåÖØ)
 
-# è‚Œè‚‰é‡é‡ = æ°´åˆ†å«é‡ + è›‹ç™½è´¨=5+6+8
-diff <- data2$è‚Œè‚‰é‡-(data2$è›‹ç™½è´¨+data2$ç»†èƒå†…æ¶²+data2$ç»†èƒå¤–æ¶²)
+# ¼¡ÈâÖØÁ¿ = Ë®·Öº¬Á¿ + µ°°×ÖÊ=5+6+8
+diff <- data2$¼¡ÈâÖØ-(data2$µ°°×ÖÊ+data2$Ï¸°ûÄÚÒº+data2$Ï¸°ûÍâÒº)
 hist(diff)
 
-# å»è„‚ä½“é‡ï¼è‚Œè‚‰é‡ï¼‹æ— æœºç›=7+10
-diff <- data2$ç˜¦ä½“é‡-(data2$è‚Œè‚‰é‡+data2$æ— æœºç›)
+# È¥Ö¬ÌåÖØ£½¼¡ÈâÖØ£«ÎŞ»úÑÎ=7+10
+diff <- data2$ÊİÌåÖØ-(data2$¼¡ÈâÖØ+data2$ÎŞ»úÑÎ)
 summary(diff)
 table(diff)
 
 
-# è„‚è‚ªç™¾åˆ†æ¯” = è„‚è‚ªé‡/ä½“é‡ * 100%
-diff<-data2$è„‚è‚ªç™¾åˆ†æ¯”-data2$è„‚è‚ªé‡/data2$ä½“é‡*100
+# Ö¬·¾°Ù·Ö±È = Ö¬·¾ÖØ/ÌåÖØ * 100%
+diff<-data2$Ö¬·¾°Ù·Ö±È-data2$Ö¬·¾ÖØ/data2$ÌåÖØ*100
 summary(diff)
 
 
-# è‚¥èƒ–åº¦ = å®é™…ä½“é‡/æ ‡å‡†ä½“é‡ * 100%
-diff <- data2$è‚¥èƒ–åº¦/100 * data2$æ ‡å‡†ä½“é‡ - data2$ä½“é‡
+# ·ÊÅÖ¶È = Êµ¼ÊÌåÖØ/±ê×¼ÌåÖØ * 100%
+diff <- data2$·ÊÅÖ¶È/100 * data2$±ê×¼ÌåÖØ - data2$ÌåÖØ
 summary(diff)
 
-# ç›®æ ‡ä½“é‡ = ä½“é‡ + ä½“é‡æ§åˆ¶ 
-diff<-data2$ä½“é‡ + data2$ä½“é‡æ§åˆ¶ - data2$ç›®æ ‡ä½“é‡
+# Ä¿±êÌåÖØ = ÌåÖØ + ÌåÖØ¿ØÖÆ 
+diff<-data2$ÌåÖØ + data2$ÌåÖØ¿ØÖÆ - data2$Ä¿±êÌåÖØ
 summary(diff)
 
-# æ ‡å‡†ä½“é‡ = ç›®æ ‡ä½“é‡, ä¸Šä¸‹ç›¸å·®10%å‡ä¸ºæ­£å¸¸
-diff <- data2$æ ‡å‡†ä½“é‡ - data2$ç›®æ ‡ä½“é‡
+# ±ê×¼ÌåÖØ = Ä¿±êÌåÖØ, ÉÏÏÂÏà²î10%¾ùÎªÕı³£
+diff <- data2$±ê×¼ÌåÖØ - data2$Ä¿±êÌåÖØ
 summary(diff)
   
-# è‚Œè‚‰é‡ - ï¼ˆ èº¯å¹²è‚Œè‚‰ + å·¦ä¸Šè‚¢è‚Œè‚‰+å³ä¸Šè‚¢è‚Œè‚‰+å·¦ä¸‹è‚¢è‚Œè‚‰+å³ä¸‹è‚¢è‚Œè‚‰ï¼‰
-diff<- data2$è‚Œè‚‰é‡ - (data2$èº¯å¹²è‚Œè‚‰ + data2$å·¦ä¸Šè‚¢è‚Œè‚‰+data2$å³ä¸Šè‚¢è‚Œè‚‰+data2$å·¦ä¸‹è‚¢è‚Œè‚‰+data2$å³ä¸‹è‚¢è‚Œè‚‰)
+# ¼¡ÈâÖØ - £¨ Çû¸É¼¡Èâ + ×óÉÏÖ«¼¡Èâ+ÓÒÉÏÖ«¼¡Èâ+×óÏÂÖ«¼¡Èâ+ÓÒÏÂÖ«¼¡Èâ£©
+diff<- data2$¼¡ÈâÖØ - (data2$Çû¸É¼¡Èâ + data2$×óÉÏÖ«¼¡Èâ+data2$ÓÒÉÏÖ«¼¡Èâ+data2$×óÏÂÖ«¼¡Èâ+data2$ÓÒÏÂÖ«¼¡Èâ)
 summary(diff)
 
-# éª¨è´¨ï¼ˆæ— æœºç›ï¼‰-ï¼ˆèº¯å¹²éª¨è´¨ +å·¦ä¸Šè‚¢éª¨è´¨+å³ä¸Šè‚¢éª¨è´¨+å·¦ä¸‹è‚¢éª¨è´¨+å³ä¸‹è‚¢éª¨è´¨ï¼‰
-diff<- data2$æ— æœºç› - (data2$èº¯å¹²éª¨è´¨ + data2$å·¦ä¸Šè‚¢éª¨è´¨+data2$å³ä¸Šè‚¢éª¨è´¨+data2$å·¦ä¸‹è‚¢éª¨è´¨+data2$å³ä¸‹è‚¢éª¨è´¨)
+# ¹ÇÖÊ£¨ÎŞ»úÑÎ£©-£¨Çû¸É¹ÇÖÊ +×óÉÏÖ«¹ÇÖÊ+ÓÒÉÏÖ«¹ÇÖÊ+×óÏÂÖ«¹ÇÖÊ+ÓÒÏÂÖ«¹ÇÖÊ£©
+diff<- data2$ÎŞ»úÑÎ - (data2$Çû¸É¹ÇÖÊ + data2$×óÉÏÖ«¹ÇÖÊ+data2$ÓÒÉÏÖ«¹ÇÖÊ+data2$×óÏÂÖ«¹ÇÖÊ+data2$ÓÒÏÂÖ«¹ÇÖÊ)
 summary(diff)
 
-# è„‚è‚ªé‡ - ï¼ˆèº¯å¹²è„‚è‚ª+å³ä¸Šè‚¢è„‚è‚ª+å·¦ä¸‹è‚¢è„‚è‚ª+å³ä¸‹è‚¢è„‚è‚ªï¼‰
-diff<- data2$è„‚è‚ªé‡ - (data2$èº¯å¹²è„‚è‚ª + data2$å·¦ä¸Šè‚¢è„‚è‚ª + data2$å³ä¸Šè‚¢è„‚è‚ª+data2$å·¦ä¸‹è‚¢è„‚è‚ª+data2$å³ä¸‹è‚¢è„‚è‚ª)
+# Ö¬·¾ÖØ - £¨Çû¸ÉÖ¬·¾+ÓÒÉÏÖ«Ö¬·¾+×óÏÂÖ«Ö¬·¾+ÓÒÏÂÖ«Ö¬·¾£©
+diff<- data2$Ö¬·¾ÖØ - (data2$Çû¸ÉÖ¬·¾ + data2$×óÉÏÖ«Ö¬·¾ + data2$ÓÒÉÏÖ«Ö¬·¾+data2$×óÏÂÖ«Ö¬·¾+data2$ÓÒÏÂÖ«Ö¬·¾)
 summary(diff)
 
-# å¯ä»¥ç ”ç©¶å„å±æ€§å¯¹æ€§åˆ«çš„åŒºåˆ†åº¦
+# ¿ÉÒÔÑĞ¾¿¸÷ÊôĞÔ¶ÔĞÔ±ğµÄÇø·Ö¶È
 
-# Min-max normalizationï¼šnew_min=0, new_max=1
+# Min-max normalization£ºnew_min=0, new_max=1
 data3<-cbind(data2[,1:3], scale(data2[,4:38], 
                                 center= apply(data2[,4:38], 2, min), 
                                 scale = apply(data2[,4:38], 2, function(x) { max(x)-min(x)})
@@ -370,7 +378,7 @@ library(grid)
 namelist<-c(3:4)
 plist<-list()
 for (colName in names(data3)[namelist]) {
-  p<-ggplot(data3)+geom_density(aes_string(x=colName, colour="æ€§åˆ«"))
+  p<-ggplot(data3)+geom_density(aes_string(x=colName, colour="ĞÔ±ğ"))
   plist<-c(plist, list(p))
 }
 multiplot(plotlist=plist)
@@ -382,7 +390,7 @@ for (i in seq(from=3, to=38, by = 4)) {
   namelist<-c(i:(i+3))
   plist<-list()
   for (colName in names(data3)[namelist]) {
-    p<-ggplot(data3)+geom_density(aes_string(x=colName, colour="æ€§åˆ«"))
+    p<-ggplot(data3)+geom_density(aes_string(x=colName, colour="ĞÔ±ğ"))
     plist<-c(plist, list(p))
   }
   print(namelist)
@@ -398,7 +406,7 @@ for (i in seq(from=3, to=38, by = 4)) {
   namelist<-c(i:(i+3))
   plist<-list()
   for (colName in names(data3)[namelist]) {
-    p<-ggplot(data3,aes_string(y=colName,x="æ€§åˆ«"))+geom_boxplot()
+    p<-ggplot(data3,aes_string(y=colName,x="ĞÔ±ğ"))+geom_boxplot()
     plist<-c(plist, list(p))
   }
   
@@ -406,7 +414,7 @@ for (i in seq(from=3, to=38, by = 4)) {
 }
 dev.off();
 
-# PCA: ä¸»æˆä»½åˆ†æ
+# PCA: Ö÷³É·İ·ÖÎö
 # p.cr<-princomp(data2[3:38])
 # summary(p.cr)
 # plot(p.cr)
@@ -421,33 +429,33 @@ dev.off();
 # pc<-principal(data2[3:38])  
 
 library(MASS)
-plda<-lda(æ€§åˆ«~., data=data2[,2:38])
+plda<-lda(ĞÔ±ğ~., data=data2[,2:38])
 
 ldacoef <-coef(plda)
 
-# å½±å“æœ€å¤§çš„
+# Ó°Ïì×î´óµÄ
 row.names(ldacoef)[which.max(abs(ldacoef))]
 
 pred = predict(plda, new_data = data3[,2:38])
 
 
-plot(data3$æ€§åˆ«, pred$x)
-tmpdata = data.frame(gender = data3$æ€§åˆ«, ld1 = pred$x)
-ggplot(tmpdata)+geom_density(aes(x=LD1, colour=gender)) # å˜æ¢å
+plot(data3$ĞÔ±ğ, pred$x)
+tmpdata = data.frame(gender = data3$ĞÔ±ğ, ld1 = pred$x)
+ggplot(tmpdata)+geom_density(aes(x=LD1, colour=gender)) # ±ä»»ºó
 
-# åŸå§‹å­—æ®µ
-ggplot(data3)+geom_density(aes_string(x="è…°è‡€æ¯”", colour="æ€§åˆ«"))
+# Ô­Ê¼×Ö¶Î
+ggplot(data3)+geom_density(aes_string(x="ÑüÍÎ±È", colour="ĞÔ±ğ"))
 
-# ç‰¹å¾é€‰æ‹©
+# ÌØÕ÷Ñ¡Ôñ
 library(caret)
 subsets <- c(1,2,5,10,20,30)
 ctrl= rfeControl(functions = rfFuncs, method = "cv",verbose = FALSE, returnResamp = "final")
-Profile = rfe(x=data3[,3:38], y=data3$æ€§åˆ«, sizes = subsets, rfeControl = ctrl)
+Profile = rfe(x=data3[,3:38], y=data3$ĞÔ±ğ, sizes = subsets, rfeControl = ctrl)
 print(Profile)
 plot(Profile)
-Profile$optVariables  # æœ€ä¼˜çš„æ˜¯ï¼š"åŸºç¡€ä»£è°¢ç‡"
+Profile$optVariables  # ×îÓÅµÄÊÇ£º"»ù´¡´úĞ»ÂÊ"
 
-p1<-ggplot(data3)+geom_density(aes_string(x="åŸºç¡€ä»£è°¢ç‡", colour="æ€§åˆ«"))
-p2<-ggplot(data3)+geom_density(aes_string(x="è„‚è‚ªç™¾åˆ†æ¯”", colour="æ€§åˆ«"))
+p1<-ggplot(data3)+geom_density(aes_string(x="»ù´¡´úĞ»ÂÊ", colour="ĞÔ±ğ"))
+p2<-ggplot(data3)+geom_density(aes_string(x="Ö¬·¾°Ù·Ö±È", colour="ĞÔ±ğ"))
 multiplot(p1,p2)
 
