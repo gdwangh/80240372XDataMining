@@ -1,3 +1,5 @@
+# 计算各点的lof值，LOF值越大表示是离群点的概率越大
+
 myLOF<-function(data, k, cores=NULL) {
   if(is.null(k))
     stop('k is missing')

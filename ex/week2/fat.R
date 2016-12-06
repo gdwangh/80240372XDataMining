@@ -1,5 +1,5 @@
 setwd("D:/study/80240372XDataMining/ex/week2")
-setwd("D:/doc/study/80240372XDataMining/ex/week2")
+# setwd("D:/doc/study/80240372XDataMining/ex/week2")
 
 data1 <- read.csv("data.csv", stringsAsFactors=FALSE)
 
@@ -49,14 +49,15 @@ plot(data2$身高,data2$年龄,col=data2$性别)
 # --- 四分法判断outlier值
 boxplot.stats(Maledata$身高)$out
 boxplot.stats(FemaleData$身高)$out
+boxplot.stats(data2$身高)$out
 
 # 用3sigma法判断outlier值，没有outlier值
 data2$身高[checkOutlet_sigma(data2$身高, 3, 'logic')]
 
 
-# 用lof法判断outlier值
+# 用lof法判断outlier值, LOF值越大表示是离群点的概率越大
 lof<-myLOF(data2$身高, k=3)
-summary(lof)
+summary(lof)  # 最大是2.83，不大
 plot(density(lof))
 data2$身高[order(lof, decreasing=T)][1:5]
 
@@ -66,13 +67,16 @@ table(data2$体重)
 hist(data2$体重)
 boxplot(体重~性别,data=data2,col=data2$性别) 
 
+boxplot.stats(data2$体重)$out  # 108.8  90.6  90.0  94.0  93.0  91.0 110.0
 boxplot.stats(Maledata$体重)$out
 boxplot.stats(FemaleData$体重)$out
 
+data2$体重[checkOutlet_sigma(data2$体重, 3, 'logic')] # 108.8  94.0  93.0 110.0
+
 lof<-myLOF(data2$体重, k=3)
-summary(lof)
+summary(lof)   # 最大的6.7110
 plot(density(lof))
-data2$体重[order(lof, decreasing=T)][1:5]
+data2$体重[order(lof, decreasing=T)][1:5] # 35.0 110.0 108.8  49.4  81.2
 
 # 部分体重有点太轻了 --> 推断 性别=1 --> Female, =0 -> Male
 plot(data2$身高, data2$体重,col=data2$性别)
